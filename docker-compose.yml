@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  service1:
+    #build:
+     # context: ./service1
+     # dockerfile: Dockerfile-service1#
+    image: 130.230.19.200:5000/tanver/service1
+    hostname: 130.230.19.200
+    ports:
+      - "8001:8001"
+    networks:
+      -  mynetwork
+    volumes:
+      -  shared-vol:/data
+  service2:
+    #build:
+    #  context: ./service2
+    #  dockerfile: Dockerfile-service2
+    image: 130.230.19.200:5000/tanver/service2
+    hostname: 130.230.19.200
+    ports:
+      - "8002:8002"
+    networks:
+      -  mynetwork
+    volumes:
+      -  shared-vol:/data
+
+networks:
+  mynetwork:
+volumes:
+  shared-vol:

@@ -1,0 +1,39 @@
+stages:
+
+   - build
+   - test
+   - push
+   - deploy
+build:
+  stage: build
+  script:
+    - cd service1
+    - ls -l
+    - docker build -t tanver/service1 .
+    - cd ../service2
+    - ls -l
+    - docker build -t tanver/service2 .
+
+test:
+  stage: test
+  script:
+    - pwd
+#    - ./status.sh 
+    - echo "Testing"
+#    - test -f "build.info.txt"
+
+push:
+  stage: push
+  script:
+    - docker tag tanver/service1 130.230.19.200:5000/tanver/service1
+    - docker push 130.230.19.200:5000/tanver/service1
+    - docker tag tanver/service2 130.230.19.200:5000/tanver/service2
+    - docker push 130.230.19.200:5000/tanver/service2
+
+
+deploy:
+  stage: deploy
+  script:
+#   - ssh -t -i ~/.ssh/id_rsa tanveer@130.230.19.200 "ls -l"
+    - ssh -v -i ~/.ssh/id_rsa -p 22  -o StrictHostKeyChecking=no tanveer@130.230.19.200 "ls -l; cd /opt/docker-project; docker-compose down; docker-compose up -d"
+#    - sshpass -v -p "spina" yes | ssh -p 22  -o StrictHostKeyChecking=no tanveer@130.230.19.200 "ls -l"
